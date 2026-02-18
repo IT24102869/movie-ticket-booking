@@ -33,6 +33,7 @@ app.include_router(showtimes_router)
 app.include_router(bookings_router)
 app.include_router(admin_router)
 app.include_router(uploads_router)
+app.include_router(ratings_router)
 
 @app.get("/health")
 def health():

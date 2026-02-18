@@ -25,6 +25,7 @@ class User(Base):
     created_at = Column(DateTime, server_default=func.now())
 
     bookings = relationship("Booking", back_populates="user")
+    ratings = relationship("Rating", back_populates="user")
 
 class Movie(Base):
     __tablename__ = "movies"
@@ -39,6 +40,7 @@ class Movie(Base):
     created_at = Column(DateTime, server_default=func.now())
 
     showtimes = relationship("Showtime", back_populates="movie")
+    ratings = relationship("Rating", back_populates="movie")
 
 class Theater(Base):
     __tablename__ = "theaters"

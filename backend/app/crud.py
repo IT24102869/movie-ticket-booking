@@ -234,6 +234,44 @@ def get_booking(db: Session, booking_id: int, user_id: int):
     )
     return db.execute(stmt).scalars().first()
 
+def upsert_rating(db: Session, user_id: int, movie_id: int, score: int) -> Rating:
+    stmt = select(Rating).where(and_(Rating.user_id == user_id, Rating.movie_id == movie_id))
+    existing = db.execute(stmt).scalars().first()
+    if existing:
+        existing.score = score
+        db.flush()
+        db.refresh(existing)
+        return existing
+    rating = Rating(user_id=user_id, movie_id=movie_id, score=score)
+    db.add(rating)
+    db.flush()
+    db.refresh(rating)
+    return rating
+
+
+def get_user_rating(db: Session, user_id: int, movie_id: int) -> Rating | None:
+    return db.execute(
+        select(Rating).where(and_(Rating.user_id == user_id, Rating.movie_id == movie_id))
+    ).scalars().first()
+
+
+def list_user_ratings(db: Session, user_id: int):
+    return db.execute(
+        select(Rating).where(Rating.user_id == user_id).order_by(Rating.id.desc())
+    ).scalars().all()
+
+
+def delete_rating(db: Session, user_id: int, movie_id: int) -> bool:
+    rating = db.execute(
+        select(Rating).where(and_(Rating.user_id == user_id, Rating.movie_id == movie_id))
+    ).scalars().first()
+    if not rating:
+        return False
+    db.delete(rating)
+    db.flush()
+    return True
+
+
 def ensure_demo_user(db: Session) -> User:
     u = db.execute(select(User).where(User.id == 1)).scalars().first()
     if u:

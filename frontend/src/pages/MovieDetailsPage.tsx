@@ -11,6 +11,54 @@ function yyyyMmDd(d: Date) {
   return `${y}-${m}-${day}`
 }
 
+function StarRating({ movieId }: { movieId: number }) {
+  const qc = useQueryClient()
+  const [hover, setHover] = useState(0)
+  const myRatingQ = useQuery({ queryKey: ['myrating', movieId], queryFn: () => fetchMyRatingForMovie(movieId) })
+  const statsQ = useQuery({ queryKey: ['moviestats', movieId], queryFn: () => fetchMovieStats(movieId) })
+  const mutation = useMutation({
+    mutationFn: (score: number) => rateMovie(movieId, score),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['myrating', movieId] })
+      qc.invalidateQueries({ queryKey: ['moviestats', movieId] })
+      qc.invalidateQueries({ queryKey: ['recommendations'] })
+    },
+  })
+
+  const myScore = myRatingQ.data?.score ?? 0
+  const stats = statsQ.data
+  const active = hover || myScore
+
+  return (
+    <div className="rating-widget">
+      <div className="rating-stars">
+        {[1, 2, 3, 4, 5].map(star => (
+          <button
+            key={star}
+            className={`rating-star ${star <= active ? 'filled' : ''}`}
+            onMouseEnter={() => setHover(star)}
+            onMouseLeave={() => setHover(0)}
+            onClick={() => mutation.mutate(star)}
+            disabled={mutation.isPending}
+          >
+            ★
+          </button>
+        ))}
+        <span className="rating-label">
+          {myScore > 0 ? `Your rating: ${myScore}/5` : 'Rate this movie'}
+        </span>
+      </div>
+      {stats && stats.count > 0 && (
+        <div className="rating-avg">
+          <span style={{ color: '#ffc107', fontSize: 16 }}>★</span>
+          <span style={{ fontWeight: 700 }}>{stats.avg_score.toFixed(1)}</span>
+          <span className="small" style={{ opacity: 0.6 }}>({stats.count} rating{stats.count === 1 ? '' : 's'})</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function MovieDetailsPage() {
   const params = useParams()
   const movieId = Number(params.id)
@@ -47,7 +95,8 @@ export default function MovieDetailsPage() {
             {movie.language && <span className="badge">{movie.language}</span>}
             <span className="badge">{movie.duration_mins} mins</span>
           </div>
-          <div className="small" style={{lineHeight: 1.45, opacity: 0.9}}>
+          <StarRating movieId={movieId} />
+          <div className="small" style={{lineHeight: 1.45, opacity: 0.9, marginTop: 10}}>
             {movie.description ?? 'No description.'}
           </div>
 
