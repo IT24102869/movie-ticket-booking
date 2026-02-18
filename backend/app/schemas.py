@@ -97,3 +97,22 @@ class BookingOut(BaseModel):
     total_amount: Decimal
     created_at: datetime
     seats: List[BookingSeatOut]
+
+class RatingIn(BaseModel):
+    movie_id: int
+    score: int = Field(ge=1, le=5)
+
+class RatingOut(BaseModel):
+    id: int
+    user_id: int
+    movie_id: int
+    score: int
+
+class MovieStatsOut(BaseModel):
+    movie_id: int
+    avg_score: float
+    count: int
+
+class RecommendationOut(BaseModel):
+    movie: MovieOut
+    predicted_score: float

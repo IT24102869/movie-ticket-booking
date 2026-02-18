@@ -9,6 +9,7 @@ from .routers.showtimes import router as showtimes_router
 from .routers.bookings import router as bookings_router
 from .routers.admin import router as admin_router
 from .routers.uploads import router as uploads_router
+from .routers.ratings import router as ratings_router
 
 app = FastAPI(title="Movie Ticket Booking API", version="1.0.0")
 

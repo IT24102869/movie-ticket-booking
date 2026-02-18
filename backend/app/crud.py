@@ -5,7 +5,7 @@ from sqlalchemy import select, and_
 from sqlalchemy.orm import Session, joinedload
 from .models import (
     Movie, Showtime, Screen, Theater, Seat, ShowtimeSeat,
-    ShowtimeSeatStatus, Booking, BookingSeat, User, BookingStatus
+    ShowtimeSeatStatus, Booking, BookingSeat, User, BookingStatus, Rating
 )
 from .settings import settings
 from .utils import utcnow
@@ -239,12 +239,12 @@ def upsert_rating(db: Session, user_id: int, movie_id: int, score: int) -> Ratin
     existing = db.execute(stmt).scalars().first()
     if existing:
         existing.score = score
-        db.flush()
+        db.commit()
         db.refresh(existing)
         return existing
     rating = Rating(user_id=user_id, movie_id=movie_id, score=score)
     db.add(rating)
-    db.flush()
+    db.commit()
     db.refresh(rating)
     return rating
 
@@ -268,7 +268,7 @@ def delete_rating(db: Session, user_id: int, movie_id: int) -> bool:
     if not rating:
         return False
     db.delete(rating)
-    db.flush()
+    db.commit()
     return True
 
 
