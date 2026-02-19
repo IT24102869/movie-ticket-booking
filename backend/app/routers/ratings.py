@@ -4,7 +4,7 @@ from sqlalchemy import select, func as sqlfunc
 from ..db import get_db
 from .. import crud
 from ..models import Rating, Movie
-from ..schemas import RatingIn, RatingOut, MovieStatsOut, RecommendationOut
+from ..schemas import RatingIn, RatingOut, RatingWithMovieOut, MovieStatsOut, RecommendationOut
 
 router = APIRouter(prefix="/ratings", tags=["ratings"])
 
@@ -21,10 +21,22 @@ def rate_movie(body: RatingIn, db: Session = Depends(get_db)):
     return rating
 
 
-@router.get("/me", response_model=list[RatingOut])
+@router.get("/me", response_model=list[RatingWithMovieOut])
 def my_ratings(db: Session = Depends(get_db)):
     crud.ensure_demo_user(db)
-    return crud.list_user_ratings(db, DEMO_USER_ID)
+    ratings = crud.list_user_ratings(db, DEMO_USER_ID)
+    results = []
+    for r in ratings:
+        movie = crud.get_movie(db, r.movie_id)
+        if movie:
+            results.append({
+                "id": r.id,
+                "user_id": r.user_id,
+                "movie_id": r.movie_id,
+                "score": r.score,
+                "movie": movie,
+            })
+    return results
 
 
 @router.get("/movie/{movie_id}", response_model=RatingOut)

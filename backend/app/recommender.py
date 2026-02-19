@@ -79,9 +79,9 @@ def get_recommendations(db: Session, user_id: int, limit: int = 10) -> list[dict
 def _popularity_fallback(db: Session, user_id: int, limit: int) -> list[dict]:
     from sqlalchemy import func as sqlfunc
 
-    user_rated = {r.movie_id for r in db.execute(
+    user_rated = set(db.execute(
         select(Rating.movie_id).where(Rating.user_id == user_id)
-    ).scalars().all()}
+    ).scalars().all())
 
     rows = db.execute(
         select(Rating.movie_id, sqlfunc.avg(Rating.score).label("avg"), sqlfunc.count().label("cnt"))

@@ -108,6 +108,13 @@ class RatingOut(BaseModel):
     movie_id: int
     score: int
 
+class RatingWithMovieOut(BaseModel):
+    id: int
+    user_id: int
+    movie_id: int
+    score: int
+    movie: MovieOut
+
 class MovieStatsOut(BaseModel):
     movie_id: int
     avg_score: float

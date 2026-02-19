@@ -8,6 +8,7 @@ import AddMoviePage from '../pages/AddMoviePage'
 import EditMoviePage from '../pages/EditMoviePage'
 import ScheduleShowtimePage from '../pages/ScheduleShowtimePage'
 import ShowPage from '../pages/Show'
+import RecommendationsPage from '../pages/RecommendationsPage'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <div className="navlinks">
           <Link to="/">Movies</Link>
           <Link to="/movies/add">Add Movie</Link>
+          <Link to="/recommendations">For You</Link>
           <Link to="/bookings">My Bookings</Link>
         </div>
       </div>
@@ -33,6 +35,7 @@ export default function App() {
           <Route path="/movies/:id/show" element={<ShowPage />} />
           <Route path="/movies/:movieId/schedule" element={<ScheduleShowtimePage />} />
           <Route path="/showtimes/:id/seats" element={<SeatSelectionPage />} />
+          <Route path="/recommendations" element={<RecommendationsPage />} />
           <Route path="/bookings" element={<MyBookingsPage />} />
         </Routes>
       </div>

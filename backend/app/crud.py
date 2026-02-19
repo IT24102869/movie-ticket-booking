@@ -221,7 +221,7 @@ def list_bookings_for_user(db: Session, user_id: int):
         )
         .order_by(Booking.id.desc())
     )
-    return db.execute(stmt).scalars().all()
+    return db.execute(stmt).unique().scalars().all()
 
 def get_booking(db: Session, booking_id: int, user_id: int):
     stmt = (
@@ -232,7 +232,7 @@ def get_booking(db: Session, booking_id: int, user_id: int):
             joinedload(Booking.seats).joinedload(BookingSeat.seat),
         )
     )
-    return db.execute(stmt).scalars().first()
+    return db.execute(stmt).unique().scalars().first()
 
 def upsert_rating(db: Session, user_id: int, movie_id: int, score: int) -> Rating:
     stmt = select(Rating).where(and_(Rating.user_id == user_id, Rating.movie_id == movie_id))
