@@ -11,7 +11,7 @@ A full-stack **Movie Ticket Booking System** built with **React**, **FastAPI**, 
 | Frontend   | React 18, TypeScript, Vite, React Router, TanStack Query, Axios |
 | Backend    | FastAPI, SQLAlchemy 2.0, Pydantic v2                        |
 | Database   | MySQL 8 (via Docker Compose)                                |
-| Styling    | Custom CSS (dark theme)                                     |
+| Styling    | Custom CSS (dark theme)                                     | 
 
 ---
 
