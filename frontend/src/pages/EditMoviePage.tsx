@@ -15,7 +15,7 @@ export default function EditMoviePage() {
     queryKey: ['movie', movieId],
     queryFn: () => fetchMovie(movieId),
     enabled: Number.isFinite(movieId),
-  })
+  }) 
 
   const [form, setForm] = useState<MovieInput | null>(null)
   const [posterFile, setPosterFile] = useState<File | null>(null)
