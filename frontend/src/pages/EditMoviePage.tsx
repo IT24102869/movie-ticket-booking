@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { fetchMovie, updateMovie, deleteMovie, type MovieInput } from '../api/movies'
 import { api, posterSrc } from '../api/client'
 
-export default function EditMoviePage() {
+export default function EditMoviePage() { 
   const params = useParams()
   const movieId = Number(params.id)
   const navigate = useNavigate()
