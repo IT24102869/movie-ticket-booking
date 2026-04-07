@@ -2,7 +2,7 @@ import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchMyBookings } from '../api/bookings'
 import { posterSrc } from '../api/client'
-
+ 
 export default function MyBookingsPage() {
   const { data, isLoading, error } = useQuery({ queryKey: ['mybookings'], queryFn: fetchMyBookings })
 
