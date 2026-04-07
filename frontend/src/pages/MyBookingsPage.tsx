@@ -5,7 +5,7 @@ import { posterSrc } from '../api/client'
  
 export default function MyBookingsPage() {
   const { data, isLoading, error } = useQuery({ queryKey: ['mybookings'], queryFn: fetchMyBookings })
-
+ 
   if (isLoading) return <div className="section">Loading bookings…</div>
   if (error) return <div className="section">Failed to load bookings.</div>
 
