@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchRecommendations, fetchMyRatings } from '../api/ratings'
 import { posterSrc } from '../api/client'
 import { Link } from 'react-router-dom'
-import type { Movie } from '../api/types'
+import type { Movie } from '../api/types' 
 
 type Recommendation = { movie: Movie; predicted_score: number }
 type MyRating = { id: number; user_id: number; movie_id: number; score: number; movie: Movie }
